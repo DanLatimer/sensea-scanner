@@ -1,3 +1,4 @@
+import { Emailer } from './emailer/emailer.js';
 import { Fetcher } from './fetcher/fetcher.js';
 import { Persistence } from './persistence/persistence.js';
 import { DBDatesAvailabilities, DateYYYYMMDD } from './types.js';
@@ -37,4 +38,7 @@ const run = async () => {
   db.addAvailabilities(datesAvailabilities);
 };
 
-run();
+if (false) {
+  run();
+}
+new Emailer().sendMail();
