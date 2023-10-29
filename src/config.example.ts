@@ -1,5 +1,12 @@
-import { Config } from './config.js';
-
+export interface Config {
+  auth: {
+    fromEmail: string;
+    toEmail: string;
+    clientId: string;
+    clientSecret: string;
+    refreshToken: string;
+  };
+}
 export const config: Config = {
   auth: {
     fromEmail: 'from-email@gmail.com',
