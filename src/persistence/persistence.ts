@@ -5,10 +5,11 @@ import {
   DateWithTime,
   DateYYYYMMDD,
 } from '../types.js';
+import { consolidateDates } from '../converter/converter.js';
 
 export interface ChangedBookings {
-  newCancellations: DBDateAvailabilities;
-  newBookings: DBDateAvailabilities;
+  newCancellations: DBDatesAvailabilities;
+  newBookings: DBDatesAvailabilities;
 }
 
 export class Persistence {
@@ -29,7 +30,7 @@ export class Persistence {
     }
 
     const fileJSON =
-      readFileSync(filename, { encoding: 'utf8', flag: 'r' }) ?? '{}';
+      readFileSync(filename, { encoding: 'utf8', flag: 'r' }).trim() || '{}';
     this.addAvailabilities(JSON.parse(fileJSON));
   }
 
@@ -87,6 +88,7 @@ export class Persistence {
         return null;
       })
       .filter((val) => val !== null);
+
     const newBookings = Object.entries(previousAvailabilities)
       .map(([date, previous]: [DateWithTime, { slotsAvailable: number }]) => {
         const current = currentAvailabilities[date];
@@ -107,8 +109,8 @@ export class Persistence {
       .filter((val) => val !== null);
 
     return {
-      newCancellations: Object.fromEntries(newCancellations),
-      newBookings: Object.fromEntries(newBookings),
+      newCancellations: consolidateDates(Object.fromEntries(newCancellations)),
+      newBookings: consolidateDates(Object.fromEntries(newBookings)),
     };
   }
 

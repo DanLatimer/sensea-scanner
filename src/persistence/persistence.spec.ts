@@ -1,15 +1,6 @@
 import { Persistence } from './persistence.js';
 
 describe('persistence', () => {
-  // {
-  //     '2023-10-16': {
-  //       '2023-10-16T12:20:00-0300': { slotsAvailable: 1 },
-  //       '2023-10-16T12:40:00-0300': { slotsAvailable: 1 }
-  //     },
-  //     '2023-10-25': { '2023-10-25T15:00:00-0300': { slotsAvailable: 2 } }
-  //   }
-  // export type DBDateAvailabilities = {[datetime: DateWithTime]: {slotsAvailable: number}}
-  // export type DBDatesAvailabilities = {[date: DateYYYYMMDD]: DBDateAvailabilities};
   describe('identifyNewAvailabilitiesForDates', () => {
     it('new date available', () => {
       const persistence = new Persistence();
@@ -19,7 +10,9 @@ describe('persistence', () => {
       });
 
       expect(result.newCancellations).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
       expect(result.newBookings).toStrictEqual({});
     });
@@ -33,8 +26,10 @@ describe('persistence', () => {
       });
 
       expect(result.newCancellations).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
-        '2023-10-25T12:20:00-0300': { slotsAvailable: 2 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
+        '2023-10-25': { '2023-10-25T12:20:00-0300': { slotsAvailable: 2 } },
       });
 
       expect(result.newBookings).toStrictEqual({});
@@ -53,7 +48,9 @@ describe('persistence', () => {
 
       expect(result.newCancellations).toStrictEqual({});
       expect(result.newBookings).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
     });
 
@@ -72,8 +69,10 @@ describe('persistence', () => {
 
       expect(result.newCancellations).toStrictEqual({});
       expect(result.newBookings).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
-        '2023-10-25T12:20:00-0300': { slotsAvailable: 2 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
+        '2023-10-25': { '2023-10-25T12:20:00-0300': { slotsAvailable: 2 } },
       });
     });
   });
@@ -87,7 +86,9 @@ describe('persistence', () => {
       });
 
       expect(result.newCancellations).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
       expect(result.newBookings).toStrictEqual({});
     });
@@ -106,7 +107,9 @@ describe('persistence', () => {
 
       expect(result.newCancellations).toStrictEqual({});
       expect(result.newBookings).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
     });
 
@@ -122,7 +125,9 @@ describe('persistence', () => {
       });
 
       expect(result.newCancellations).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
       expect(result.newBookings).toStrictEqual({});
     });
@@ -140,7 +145,9 @@ describe('persistence', () => {
 
       expect(result.newCancellations).toStrictEqual({});
       expect(result.newBookings).toStrictEqual({
-        '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        '2023-10-15': {
+          '2023-10-15T12:20:00-0300': { slotsAvailable: 1 },
+        },
       });
     });
   });

@@ -14,6 +14,7 @@ const datesInterested: DateYYYYMMDD[] = [
 const run = async () => {
   const db = new Persistence('./db.json');
   const fetcher = new Fetcher();
+  const emailer = new Emailer();
   console.log('Starting Sensea Scanner');
 
   console.log('------------------------------------------------\n');
@@ -36,9 +37,13 @@ const run = async () => {
 
   console.log('newAvailabilities', newAvailabilities);
   db.addAvailabilities(datesAvailabilities);
+
+  if (
+    Object.keys(newAvailabilities.newBookings).length > 0 ||
+    Object.keys(newAvailabilities.newCancellations).length > 0
+  ) {
+    emailer.sendMail(datesInterested, newAvailabilities, db.availabilities);
+  }
 };
 
-if (false) {
-  run();
-}
-new Emailer().sendMail();
+run();
