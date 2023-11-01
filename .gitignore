@@ -31,3 +31,6 @@ build/
 # Config
 
 config.ts
+
+# Persistence
+db.json
