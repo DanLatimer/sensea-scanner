@@ -42,7 +42,9 @@ export class Persistence {
     this.availabilities = Object.fromEntries(nonEmptyEntries);
   }
 
-  public addAvailabilities(availabilitiesObjectToAdd: DBDatesAvailabilities) {
+  public addAvailabilities(
+    availabilitiesObjectToAdd: DBDatesAvailabilities,
+  ): void {
     this.availabilities = {
       ...this.availabilities,
       ...availabilitiesObjectToAdd,

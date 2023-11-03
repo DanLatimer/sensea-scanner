@@ -34,3 +34,9 @@ config.ts
 
 # Persistence
 db.json
+
+# Logs
+
+scanner.log.txt 
+scanner.out.txt 
+scanner.err.txt

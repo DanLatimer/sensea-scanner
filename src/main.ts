@@ -1,17 +1,15 @@
+import { config } from './config.js';
+import { isInThePast } from './date-utils/date-utils.js';
 import { Emailer } from './emailer/emailer.js';
 import { Fetcher } from './fetcher/fetcher.js';
 import { Persistence } from './persistence/persistence.js';
 import { DBDatesAvailabilities, DateYYYYMMDD } from './types.js';
 
-const datesInterested: DateYYYYMMDD[] = [
-  '2023-11-04',
-  '2023-11-05',
-  '2023-11-11',
-  '2023-11-12',
-  '2023-10-31',
-];
+const getDatesInterested = (): DateYYYYMMDD[] => {
+  return config.datesInterested.filter((date) => !isInThePast(date));
+};
 
-const run = async () => {
+const run: () => void = async () => {
   const db = new Persistence('./db.json');
   const fetcher = new Fetcher();
   const emailer = new Emailer();
@@ -19,12 +17,12 @@ const run = async () => {
 
   console.log('------------------------------------------------\n');
 
-  console.log('Interested in these dates: ', datesInterested);
+  console.log('Interested in these dates: ', getDatesInterested());
 
-  const dates = await fetcher.queryMonthsForDates(datesInterested);
+  const dates = await fetcher.queryMonthsForDates(getDatesInterested());
 
   const datesInterestedEmptyResults: DBDatesAvailabilities = Object.fromEntries(
-    datesInterested.map((date) => [date, {}]),
+    getDatesInterested().map((date) => [date, {}]),
   );
 
   const datesAvailabilities = {
@@ -42,8 +40,12 @@ const run = async () => {
     Object.keys(newAvailabilities.newBookings).length > 0 ||
     Object.keys(newAvailabilities.newCancellations).length > 0
   ) {
-    emailer.sendMail(datesInterested, newAvailabilities, db.availabilities);
+    emailer.sendMail(
+      getDatesInterested(),
+      newAvailabilities,
+      db.availabilities,
+    );
   }
 };
 
-run();
+setInterval(() => run(), config.pollIntervalInSeconds * 1000);

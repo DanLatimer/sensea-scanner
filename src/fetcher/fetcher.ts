@@ -1,19 +1,22 @@
 import {
   AvailabilitiesForDates,
+  DBDateAvailabilities,
   DBDatesAvailabilities,
   DateYYYYMMDD,
   TimeSlot,
 } from '../types.js';
 
-const queryMonthUrl = (firstOfMonth) =>
+const queryMonthUrl = (firstOfMonth: string): string =>
   `https://sensea.as.me/api/scheduling/v1/availability/month?owner=1e0cc157&appointmentTypeId=15360506&calendarId=3581411&timezone=America%2FHalifax&month=${firstOfMonth}`;
-const queryTimesUrl = (date) =>
+const queryTimesUrl = (date: string): string =>
   `https://sensea.as.me/api/scheduling/v1/availability/times?owner=1e0cc157&appointmentTypeId=15360506&calendarId=3581411&startDate=${date}&timezone=America%2FHalifax`;
 
 export function convertAvailabilitesForDatesFromArrays(
   original: AvailabilitiesForDates[],
 ): DBDatesAvailabilities {
-  const convertAvailabilitiesForDate = (availabilities: TimeSlot[]) => {
+  const convertAvailabilitiesForDate = (
+    availabilities: TimeSlot[],
+  ): DBDateAvailabilities => {
     const dateTimeToAvailabilitiesObject = availabilities.map(
       (availability) => [
         availability.time,
@@ -64,6 +67,12 @@ export class Fetcher {
   ): Promise<DateYYYYMMDD[]> {
     const response = await fetch(queryMonthUrl(month));
     const json = await response.json();
+
+    if (json.error) {
+      console.error(`Failed to query month: ${month}`, json);
+      console.error(`response`, response);
+      return [];
+    }
 
     const datesWithAvailability = Object.entries(json)
       .filter(([_, hasAvailability]) => hasAvailability)
