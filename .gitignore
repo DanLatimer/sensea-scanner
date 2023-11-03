@@ -33,6 +33,7 @@ build/
 config.ts
 
 # Persistence
+
 db.json
 
 # Logs
