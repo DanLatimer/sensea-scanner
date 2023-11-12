@@ -5,7 +5,7 @@ export interface TimeSlot {
   time: DateWithTime;
   slotsAvailable: number;
 }
-export type AvailabilitiesForDates = { [date: DateYYYYMMDD]: TimeSlot[] };
+export type TimeslotsForDates = { [date: DateYYYYMMDD]: TimeSlot[] };
 
 // {
 //     '2023-10-16': {

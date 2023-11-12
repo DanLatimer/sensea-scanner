@@ -1,5 +1,5 @@
 import {
-  AvailabilitiesForDates,
+  TimeslotsForDates as DateToTimeslots,
   DayAvailabilities,
   DBDatesAvailabilities,
   DateYYYYMMDD,
@@ -11,28 +11,29 @@ const queryMonthUrl = (firstOfMonth: string): string =>
 const queryTimesUrl = (date: string): string =>
   `https://sensea.as.me/api/scheduling/v1/availability/times?owner=1e0cc157&appointmentTypeId=15360506&calendarId=3581411&startDate=${date}&timezone=America%2FHalifax`;
 
-export function convertAvailabilitesForDatesFromArrays(
-  original: AvailabilitiesForDates[],
+export function convertDatesToTimeslotsIntoDBDatesAvailabilities(
+  datesToTimeslots: DateToTimeslots[],
 ): DBDatesAvailabilities {
-  const convertAvailabilitiesForDate = (
-    availabilities: TimeSlot[],
+  const convertTimeslotsToDayAvailabilities = (
+    timeslots: TimeSlot[],
   ): DayAvailabilities => {
-    const dateTimeToAvailabilitiesObject = availabilities.map(
-      (availability) => [
-        availability.time,
-        { slotsAvailable: availability.slotsAvailable },
-      ],
-    );
+    const dateTimeToTimeslotsEntries = timeslots.map((timeslot) => [
+      timeslot.time,
+      { slotsAvailable: timeslot.slotsAvailable },
+    ]);
 
-    return Object.fromEntries(dateTimeToAvailabilitiesObject);
+    return Object.fromEntries(dateTimeToTimeslotsEntries);
   };
 
-  const merged = original.reduce((acc, cur) => ({ ...acc, ...cur }), {});
+  const mergedDatesToTimeslots = datesToTimeslots.reduce(
+    (acc, cur) => ({ ...acc, ...cur }),
+    {},
+  );
 
   const final = Object.fromEntries(
-    Object.entries(merged).map(([date, availabilities]) => [
+    Object.entries(mergedDatesToTimeslots).map(([date, timeslots]) => [
       date,
-      convertAvailabilitiesForDate(availabilities),
+      convertTimeslotsToDayAvailabilities(timeslots),
     ]),
   );
 
@@ -96,7 +97,7 @@ export class Fetcher {
   // returns availabilities for a given date {[Date]: {time: IsoDateTime; slotsAvailable: number}[]} Eg. {'2023-10-13': [{time: '2023-10-13T10:20:00-0300', slotsAvailable: 1 },]}
   public async queryAvailabilities(
     date: DateYYYYMMDD,
-  ): Promise<AvailabilitiesForDates> {
+  ): Promise<DateToTimeslots> {
     const response = await fetch(queryTimesUrl(date));
     const json = await response.json();
 
@@ -110,9 +111,8 @@ export class Fetcher {
       dates.map(this.queryAvailabilities),
     );
 
-    const dbDatesAvailabilities = convertAvailabilitesForDatesFromArrays(
-      availabilitiesForDates,
-    );
+    const dbDatesAvailabilities =
+      convertDatesToTimeslotsIntoDBDatesAvailabilities(availabilitiesForDates);
 
     return dbDatesAvailabilities;
   }
