@@ -1,24 +1,16 @@
-import { DateYYYYMMDD } from './types.js';
-
-export interface Config {
-  auth: {
-    fromEmail: string;
-    toEmail: string;
-    clientId: string;
-    clientSecret: string;
-    refreshToken: string;
-  };
-  datesInterested: DateYYYYMMDD[];
-  pollIntervalInSeconds: number;
-}
+import { Config } from './types.js';
 
 export const config: Config = {
   auth: {
     fromEmail: 'from-email@gmail.com',
-    toEmail: 'to-email@gmail.com',
     clientId: '<client-id here>',
     clientSecret: '<client-secret-here>',
     refreshToken: '<refresh-token-here>',
+  },
+  notification: {
+    toEmail: 'to-email@gmail.com',
+    minimumSlotsToNotify: 1,
+    shouldNotifyOnNewBookings: false,
   },
   datesInterested: ['2023-10-11', '2023-10-12'],
   pollIntervalInSeconds: 60 * 5,

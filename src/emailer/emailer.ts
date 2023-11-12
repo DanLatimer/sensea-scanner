@@ -1,14 +1,14 @@
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
-import { config } from '../config.js';
+import { getConfig } from '../config.js';
 import { ChangedBookings } from '../persistence/persistence.js';
 import { DBDatesAvailabilities } from '../types.js';
 const OAuth2 = google.auth.OAuth2;
 
 export class Emailer {
   public oauth2Client = new OAuth2(
-    config.auth.clientId,
-    config.auth.clientSecret,
+    getConfig().auth.clientId,
+    getConfig().auth.clientSecret,
     'https://developers.google.com/oauthplayground', // Redirect URL
   );
 
@@ -20,7 +20,7 @@ export class Emailer {
     allAvailabilities: DBDatesAvailabilities,
   ): Promise<void> {
     this.oauth2Client.setCredentials({
-      refresh_token: config.auth.refreshToken,
+      refresh_token: getConfig().auth.refreshToken,
     });
     const accessToken = this.oauth2Client.getAccessToken();
 
@@ -28,10 +28,10 @@ export class Emailer {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: config.auth.fromEmail,
-        clientId: config.auth.clientId,
-        clientSecret: config.auth.clientSecret,
-        refreshToken: config.auth.refreshToken,
+        user: getConfig().auth.fromEmail,
+        clientId: getConfig().auth.clientId,
+        clientSecret: getConfig().auth.clientSecret,
+        refreshToken: getConfig().auth.refreshToken,
         accessToken: accessToken,
       },
       tls: {
@@ -40,8 +40,8 @@ export class Emailer {
     });
 
     const mailOptions = {
-      from: `Sensea Scanner <${config.auth.fromEmail}>`,
-      to: config.auth.toEmail,
+      from: `Sensea Scanner <${getConfig().auth.fromEmail}>`,
+      to: getConfig().notification.toEmail,
       subject: 'Sensea Scanner Report',
       generateTextFromHTML: true,
       html: this.generateEmailBody(

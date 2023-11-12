@@ -1,12 +1,13 @@
-import { config } from './config.js';
+import { getConfig } from './config.js';
 import { isInThePast } from './date-utils/date-utils.js';
 import { Emailer } from './emailer/emailer.js';
+import { shouldNotify } from './emailer/should-notify.js';
 import { Fetcher } from './fetcher/fetcher.js';
 import { Persistence } from './persistence/persistence.js';
 import { DBDatesAvailabilities, DateYYYYMMDD } from './types.js';
 
 const getDatesInterested = (): DateYYYYMMDD[] => {
-  return config.datesInterested.filter((date) => !isInThePast(date));
+  return getConfig().datesInterested.filter((date) => !isInThePast(date));
 };
 
 const run: () => void = async () => {
@@ -36,10 +37,7 @@ const run: () => void = async () => {
   console.log('newAvailabilities', newAvailabilities);
   db.addAvailabilities(datesAvailabilities);
 
-  if (
-    Object.keys(newAvailabilities.newBookings).length > 0 ||
-    Object.keys(newAvailabilities.newCancellations).length > 0
-  ) {
+  if (shouldNotify(newAvailabilities)) {
     emailer.sendMail(
       getDatesInterested(),
       newAvailabilities,
@@ -48,4 +46,4 @@ const run: () => void = async () => {
   }
 };
 
-setInterval(() => run(), config.pollIntervalInSeconds * 1000);
+setInterval(() => run(), getConfig().pollIntervalInSeconds * 1000);
