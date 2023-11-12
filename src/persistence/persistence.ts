@@ -5,7 +5,7 @@ import {
   DateWithTime,
   DateYYYYMMDD,
 } from '../types.js';
-import { consolidateDates } from '../converter/converter.js';
+import { seperateMergedDayAvailabilities } from '../converter/converter.js';
 
 export interface ChangedBookings {
   newCancellations: DBDatesAvailabilities;
@@ -111,8 +111,12 @@ export class Persistence {
       .filter((val) => val !== null);
 
     return {
-      newCancellations: consolidateDates(Object.fromEntries(newCancellations)),
-      newBookings: consolidateDates(Object.fromEntries(newBookings)),
+      newCancellations: seperateMergedDayAvailabilities(
+        Object.fromEntries(newCancellations),
+      ),
+      newBookings: seperateMergedDayAvailabilities(
+        Object.fromEntries(newBookings),
+      ),
     };
   }
 

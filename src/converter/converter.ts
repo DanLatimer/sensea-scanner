@@ -1,9 +1,9 @@
 import { DayAvailabilities, DBDatesAvailabilities } from '../types.js';
 
-export function consolidateDates(
-  dates: DayAvailabilities,
+export function seperateMergedDayAvailabilities(
+  mergedDayAvailabilities: DayAvailabilities,
 ): DBDatesAvailabilities {
-  return Object.entries(dates)
+  return Object.entries(mergedDayAvailabilities)
     .map(([dateTime, { slotsAvailable }]) => {
       const [dateYYYYMMDD] = dateTime.split('T');
       return {
