@@ -1,7 +1,7 @@
-import { DBDateAvailabilities, DBDatesAvailabilities } from '../types.js';
+import { DayAvailabilities, DBDatesAvailabilities } from '../types.js';
 
 export function consolidateDates(
-  dates: DBDateAvailabilities,
+  dates: DayAvailabilities,
 ): DBDatesAvailabilities {
   return Object.entries(dates)
     .map(([dateTime, { slotsAvailable }]) => {

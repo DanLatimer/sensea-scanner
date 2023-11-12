@@ -1,6 +1,6 @@
 import {
   AvailabilitiesForDates,
-  DBDateAvailabilities,
+  DayAvailabilities,
   DBDatesAvailabilities,
   DateYYYYMMDD,
   TimeSlot,
@@ -16,7 +16,7 @@ export function convertAvailabilitesForDatesFromArrays(
 ): DBDatesAvailabilities {
   const convertAvailabilitiesForDate = (
     availabilities: TimeSlot[],
-  ): DBDateAvailabilities => {
+  ): DayAvailabilities => {
     const dateTimeToAvailabilitiesObject = availabilities.map(
       (availability) => [
         availability.time,

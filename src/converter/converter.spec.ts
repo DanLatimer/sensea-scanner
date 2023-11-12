@@ -1,10 +1,10 @@
-import { DBDateAvailabilities } from '../types.js';
+import { DayAvailabilities } from '../types.js';
 import { consolidateDates } from './converter.js';
 
 describe('converter', () => {
   describe('consolidateDates', () => {
     it('should consolidate same day', () => {
-      const before: DBDateAvailabilities = {
+      const before: DayAvailabilities = {
         '2023-10-01T10:00:00.000Z': { slotsAvailable: null },
         '2023-10-01T12:00:00.000Z': { slotsAvailable: null },
       };
@@ -15,7 +15,7 @@ describe('converter', () => {
     });
 
     it('should maintain slotsAvailable after consolidating', () => {
-      const before: DBDateAvailabilities = {
+      const before: DayAvailabilities = {
         '2023-10-01T10:00:00.000Z': { slotsAvailable: 1 },
         '2023-10-01T12:00:00.000Z': { slotsAvailable: 2 },
       };
@@ -29,7 +29,7 @@ describe('converter', () => {
       const oct1 = { '2023-10-01T10:00:00.000Z': { slotsAvailable: null } };
       const oct2 = { '2023-10-02T12:00:00.000Z': { slotsAvailable: null } };
 
-      const before: DBDateAvailabilities = { ...oct1, ...oct2 };
+      const before: DayAvailabilities = { ...oct1, ...oct2 };
 
       const after = consolidateDates(before);
 
@@ -43,7 +43,7 @@ describe('converter', () => {
         '2023-10-01T17:00:00.000Z': { slotsAvailable: null },
       };
 
-      const before: DBDateAvailabilities = {
+      const before: DayAvailabilities = {
         ...oct1Noon,
         ...oct2,
         ...oct1Dinner,

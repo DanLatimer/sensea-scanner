@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import {
-  DBDateAvailabilities,
+  DayAvailabilities,
   DBDatesAvailabilities,
   DateWithTime,
   DateYYYYMMDD,
@@ -66,7 +66,7 @@ export class Persistence {
 
   public identifyNewAvailabilityForDate(
     dateToCheck: DateYYYYMMDD,
-    availabilitiesForDateToCheck: DBDateAvailabilities,
+    availabilitiesForDateToCheck: DayAvailabilities,
   ): ChangedBookings {
     const previousAvailabilities = this.availabilities[dateToCheck] ?? {};
 
