@@ -1,5 +1,5 @@
 import { TimeslotsForDates } from '../types.js';
-import { convertDatesToTimeslotsIntoDBDatesAvailabilities } from './fetcher.js';
+import { convertDatesToTimeslotsIntoMonthAvailabilities } from './fetcher.js';
 
 describe('fetcher', () => {
   describe('convertDatesToTimeslotsIntoDBDatesAvailabilities', () => {
@@ -9,7 +9,7 @@ describe('fetcher', () => {
         { '2023-10-25': [] },
       ];
       const converted =
-        convertDatesToTimeslotsIntoDBDatesAvailabilities(timeslotsForDates);
+        convertDatesToTimeslotsIntoMonthAvailabilities(timeslotsForDates);
 
       expect(Object.keys(converted)).toContain('2023-10-15');
       expect(Object.keys(converted)).toContain('2023-10-25');
@@ -24,7 +24,7 @@ describe('fetcher', () => {
         { '2023-10-15': timeSlots },
       ];
       const convertedDBDatesAvailabilities =
-        convertDatesToTimeslotsIntoDBDatesAvailabilities(timeslotsForDates);
+        convertDatesToTimeslotsIntoMonthAvailabilities(timeslotsForDates);
 
       const convertedDayAvailabilities =
         convertedDBDatesAvailabilities['2023-10-15'];

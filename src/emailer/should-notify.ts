@@ -1,6 +1,6 @@
 import { getConfig } from '../config.js';
 import { ChangedBookings } from '../persistence/persistence.js';
-import { DBDatesAvailabilities } from '../types.js';
+import { MonthAvailabilities } from '../types.js';
 
 export function shouldNotify(newAvailabilities: ChangedBookings): boolean {
   const requirementOrClauses = [];
@@ -28,10 +28,10 @@ export function shouldNotify(newAvailabilities: ChangedBookings): boolean {
 }
 
 function getTimeSlotAvailabilityCounts(
-  dateToDatesAvailabilities: DBDatesAvailabilities,
+  monthAvailabilities: MonthAvailabilities,
 ): { slotsAvailable: number }[] {
-  const datesAvailabilities = Object.values(dateToDatesAvailabilities);
-  return datesAvailabilities.flatMap((dateAvailablities) =>
-    Object.values(dateAvailablities),
+  const dayAvailabilitiesArray = Object.values(monthAvailabilities);
+  return dayAvailabilitiesArray.flatMap((dayAvailablities) =>
+    Object.values(dayAvailablities),
   );
 }

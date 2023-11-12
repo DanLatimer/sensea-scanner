@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import { getConfig } from '../config.js';
 import { ChangedBookings } from '../persistence/persistence.js';
-import { DBDatesAvailabilities } from '../types.js';
+import { MonthAvailabilities } from '../types.js';
 const OAuth2 = google.auth.OAuth2;
 
 export class Emailer {
@@ -17,7 +17,7 @@ export class Emailer {
   public async sendMail(
     datesInterested: string[],
     newAvailabilities: ChangedBookings,
-    allAvailabilities: DBDatesAvailabilities,
+    allAvailabilities: MonthAvailabilities,
   ): Promise<void> {
     this.oauth2Client.setCredentials({
       refresh_token: getConfig().auth.refreshToken,
@@ -60,9 +60,9 @@ export class Emailer {
   }
 
   private countAvailabilities(
-    datesAvailabilities: DBDatesAvailabilities,
+    monthAvailabilities: MonthAvailabilities,
   ): number {
-    const datesAvailabilitiesEntries = Object.entries(datesAvailabilities);
+    const datesAvailabilitiesEntries = Object.entries(monthAvailabilities);
     return datesAvailabilitiesEntries.reduce(
       (acc, [_, dateAvailabilities]) =>
         acc + Object.keys(dateAvailabilities).length,
@@ -71,9 +71,9 @@ export class Emailer {
   }
 
   private formatAvailabilityList(
-    datesAvailabilites: DBDatesAvailabilities,
+    monthAvailabilites: MonthAvailabilities,
   ): string {
-    const datesAvailabilitesEntries = Object.entries(datesAvailabilites);
+    const datesAvailabilitesEntries = Object.entries(monthAvailabilites);
 
     return `<ul>
     ${datesAvailabilitesEntries
@@ -102,7 +102,7 @@ export class Emailer {
   private generateEmailBody(
     datesInterested: string[],
     newAvailabilities: ChangedBookings,
-    allAvailabilities: DBDatesAvailabilities,
+    allAvailabilities: MonthAvailabilities,
   ): string {
     const { newBookings, newCancellations } = newAvailabilities;
 

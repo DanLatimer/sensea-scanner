@@ -4,7 +4,7 @@ import { Emailer } from './emailer/emailer.js';
 import { shouldNotify } from './emailer/should-notify.js';
 import { Fetcher } from './fetcher/fetcher.js';
 import { Persistence } from './persistence/persistence.js';
-import { DBDatesAvailabilities, DateYYYYMMDD } from './types.js';
+import { MonthAvailabilities, DateYYYYMMDD } from './types.js';
 
 const getDatesInterested = (): DateYYYYMMDD[] => {
   return getConfig().datesInterested.filter((date) => !isInThePast(date));
@@ -22,7 +22,7 @@ const run: () => void = async () => {
 
   const dates = await fetcher.queryMonthsForDates(getDatesInterested());
 
-  const datesInterestedEmptyResults: DBDatesAvailabilities = Object.fromEntries(
+  const datesInterestedEmptyResults: MonthAvailabilities = Object.fromEntries(
     getDatesInterested().map((date) => [date, {}]),
   );
 
@@ -41,7 +41,7 @@ const run: () => void = async () => {
     emailer.sendMail(
       getDatesInterested(),
       newAvailabilities,
-      db.availabilities,
+      db.monthAvailabilities,
     );
   }
 };

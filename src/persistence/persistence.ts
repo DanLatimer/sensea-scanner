@@ -1,19 +1,19 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import {
   DayAvailabilities,
-  DBDatesAvailabilities,
+  MonthAvailabilities,
   DateWithTime,
   DateYYYYMMDD,
 } from '../types.js';
 import { seperateMergedDayAvailabilities } from '../converter/converter.js';
 
 export interface ChangedBookings {
-  newCancellations: DBDatesAvailabilities;
-  newBookings: DBDatesAvailabilities;
+  newCancellations: MonthAvailabilities;
+  newBookings: MonthAvailabilities;
 }
 
 export class Persistence {
-  public availabilities: DBDatesAvailabilities = {};
+  public monthAvailabilities: MonthAvailabilities = {};
 
   public constructor(private filename: string = null) {
     if (!this.filename) {
@@ -35,19 +35,19 @@ export class Persistence {
   }
 
   public removeEmptyDates(): void {
-    const nonEmptyEntries = Object.entries(this.availabilities).filter(
+    const nonEmptyEntries = Object.entries(this.monthAvailabilities).filter(
       ([_, availabilities]) => Object.keys(availabilities).length > 0,
     );
 
-    this.availabilities = Object.fromEntries(nonEmptyEntries);
+    this.monthAvailabilities = Object.fromEntries(nonEmptyEntries);
   }
 
   public addAvailabilities(
-    availabilitiesObjectToAdd: DBDatesAvailabilities,
+    monthAvailabilitiesToAdd: MonthAvailabilities,
   ): void {
-    this.availabilities = {
-      ...this.availabilities,
-      ...availabilitiesObjectToAdd,
+    this.monthAvailabilities = {
+      ...this.monthAvailabilities,
+      ...monthAvailabilitiesToAdd,
     };
 
     this.removeEmptyDates();
@@ -55,7 +55,7 @@ export class Persistence {
     if (this.filename) {
       writeFileSync(
         this.filename,
-        JSON.stringify(this.availabilities, null, '  '),
+        JSON.stringify(this.monthAvailabilities, null, '  '),
         {
           encoding: 'utf8',
           flag: 'w',
@@ -66,11 +66,11 @@ export class Persistence {
 
   public identifyNewAvailabilityForDate(
     dateToCheck: DateYYYYMMDD,
-    availabilitiesForDateToCheck: DayAvailabilities,
+    dayAvailabilities: DayAvailabilities,
   ): ChangedBookings {
-    const previousAvailabilities = this.availabilities[dateToCheck] ?? {};
+    const previousAvailabilities = this.monthAvailabilities[dateToCheck] ?? {};
 
-    const currentAvailabilities = availabilitiesForDateToCheck ?? {};
+    const currentAvailabilities = dayAvailabilities ?? {};
 
     const newCancellations = Object.entries(currentAvailabilities)
       .map(([date, current]: [DateWithTime, { slotsAvailable: number }]) => {
@@ -121,7 +121,7 @@ export class Persistence {
   }
 
   public identifyNewAvailabilitiesForDates(
-    toCheckObject: DBDatesAvailabilities,
+    toCheckObject: MonthAvailabilities,
   ): ChangedBookings {
     const availabilitiesForDates = Object.entries(toCheckObject).map(
       ([dateYYYYMMDD, availabilities]) =>

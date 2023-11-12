@@ -156,7 +156,7 @@ describe('persistence', () => {
     it('should clear empty dates', () => {
       const persistence = new Persistence();
       persistence.addAvailabilities({ '2023-10-15': {} });
-      expect(persistence.availabilities['2023-10-15']).toBeUndefined();
+      expect(persistence.monthAvailabilities['2023-10-15']).toBeUndefined();
     });
 
     it('should persist dates with availabilities', () => {
@@ -164,7 +164,7 @@ describe('persistence', () => {
       persistence.addAvailabilities({
         '2023-10-15': { '2023-10-15T12:20:00-0300': { slotsAvailable: 2 } },
       });
-      expect(persistence.availabilities['2023-10-15']).toStrictEqual({
+      expect(persistence.monthAvailabilities['2023-10-15']).toStrictEqual({
         '2023-10-15T12:20:00-0300': { slotsAvailable: 2 },
       });
     });
@@ -175,8 +175,8 @@ describe('persistence', () => {
         '2023-10-14': {},
         '2023-10-15': { '2023-10-15T12:20:00-0300': { slotsAvailable: 2 } },
       });
-      expect(persistence.availabilities['2023-10-14']).toBeUndefined();
-      expect(persistence.availabilities['2023-10-15']).toStrictEqual({
+      expect(persistence.monthAvailabilities['2023-10-14']).toBeUndefined();
+      expect(persistence.monthAvailabilities['2023-10-15']).toStrictEqual({
         '2023-10-15T12:20:00-0300': { slotsAvailable: 2 },
       });
     });

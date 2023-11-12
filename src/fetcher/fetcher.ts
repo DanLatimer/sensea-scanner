@@ -1,7 +1,7 @@
 import {
   TimeslotsForDates as DateToTimeslots,
   DayAvailabilities,
-  DBDatesAvailabilities,
+  MonthAvailabilities,
   DateYYYYMMDD,
   TimeSlot,
 } from '../types.js';
@@ -11,9 +11,9 @@ const queryMonthUrl = (firstOfMonth: string): string =>
 const queryTimesUrl = (date: string): string =>
   `https://sensea.as.me/api/scheduling/v1/availability/times?owner=1e0cc157&appointmentTypeId=15360506&calendarId=3581411&startDate=${date}&timezone=America%2FHalifax`;
 
-export function convertDatesToTimeslotsIntoDBDatesAvailabilities(
+export function convertDatesToTimeslotsIntoMonthAvailabilities(
   datesToTimeslots: DateToTimeslots[],
-): DBDatesAvailabilities {
+): MonthAvailabilities {
   const convertTimeslotsToDayAvailabilities = (
     timeslots: TimeSlot[],
   ): DayAvailabilities => {
@@ -30,14 +30,14 @@ export function convertDatesToTimeslotsIntoDBDatesAvailabilities(
     {},
   );
 
-  const final = Object.fromEntries(
+  const monthAvailabilities = Object.fromEntries(
     Object.entries(mergedDatesToTimeslots).map(([date, timeslots]) => [
       date,
       convertTimeslotsToDayAvailabilities(timeslots),
     ]),
   );
 
-  return final;
+  return monthAvailabilities;
 }
 
 export class Fetcher {
@@ -104,15 +104,13 @@ export class Fetcher {
     return json;
   }
 
-  public async queryDates(
-    dates: DateYYYYMMDD[],
-  ): Promise<DBDatesAvailabilities> {
+  public async queryDates(dates: DateYYYYMMDD[]): Promise<MonthAvailabilities> {
     const availabilitiesForDates = await Promise.all(
       dates.map(this.queryAvailabilities),
     );
 
     const dbDatesAvailabilities =
-      convertDatesToTimeslotsIntoDBDatesAvailabilities(availabilitiesForDates);
+      convertDatesToTimeslotsIntoMonthAvailabilities(availabilitiesForDates);
 
     return dbDatesAvailabilities;
   }

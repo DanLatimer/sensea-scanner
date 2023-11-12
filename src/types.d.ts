@@ -17,7 +17,7 @@ export type TimeslotsForDates = { [date: DateYYYYMMDD]: TimeSlot[] };
 export type DayAvailabilities = {
   [datetime: DateWithTime]: { slotsAvailable: number };
 };
-export type DBDatesAvailabilities = {
+export type MonthAvailabilities = {
   [date: DateYYYYMMDD]: DayAvailabilities;
 };
 
