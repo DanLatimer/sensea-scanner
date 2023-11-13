@@ -40,6 +40,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "googleapis": "^128.0.0",
+    "mailgen": "^2.0.28",
     "nodemailer": "^6.9.7",
     "tslib": "~2.6"
   },

@@ -53,9 +53,13 @@ export class Emailer {
     };
 
     console.log('\nSending email with updates');
-    smtpTransport.sendMail(mailOptions, (error, response) => {
+    smtpTransport.sendMail(mailOptions, (error) => {
       console.log(`Email sent ${error ? 'unsuccessfully' : 'successfully'}`);
-      error ? console.log(error) : console.log(response);
+
+      if (error) {
+        console.error(error);
+      }
+
       smtpTransport.close();
     });
   }

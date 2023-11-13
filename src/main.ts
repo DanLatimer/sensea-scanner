@@ -46,4 +46,5 @@ const run: () => void = async () => {
   }
 };
 
+run();
 setInterval(() => run(), getConfig().pollIntervalInSeconds * 1000);
