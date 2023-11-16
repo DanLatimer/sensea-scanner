@@ -14,7 +14,7 @@ const run: () => void = async () => {
   const db = new Persistence('./db.json');
   const fetcher = new Fetcher();
   const emailer = new Emailer();
-  console.log('Starting Sensea Scanner');
+  console.log(`\n\nStarting Sensea Scanner ${new Date().toLocaleString()}`);
 
   console.log('------------------------------------------------\n');
 

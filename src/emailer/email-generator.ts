@@ -65,7 +65,7 @@ export function generateEmailBody(
 
 interface Table {
   date: string;
-  dateTime: string;
+  time: string;
   slotsAvailable: number;
 }
 
@@ -77,7 +77,7 @@ function formatAvailabiltiesAsTable(
       return Object.entries(dayAvailabilities).map(
         ([dateTime, { slotsAvailable }]) => ({
           date,
-          dateTime,
+          time: new Date(dateTime).toLocaleTimeString(),
           slotsAvailable,
         }),
       );
